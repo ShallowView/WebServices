@@ -1,4 +1,8 @@
 {
 	"$schema": "https://inlang.com/schema/inlang-message-format",
-	"hello_world": "Hello, {name} from fr!"
+	"entry_page": {
+		"description": "Hello, from fr!",
+		"analysis_title": "analyses échecs",
+		"btn_global_analysis": "Voir analyses globales"
+	}
 }
