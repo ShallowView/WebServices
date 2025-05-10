@@ -368,6 +368,13 @@
 
 	import chess_board_svg from "$lib/images/chess_board.svg"; // taken from https://www.vecteezy.com/vector-art/27622972-wooden-chessboard-with-chess-pieces-gameboard-leisure-activity
 
+  import arrow_left_svg from "$lib/icons/arrow-left.svg";
+  import arrow_right_svg from "$lib/icons/arrow-right.svg";
+
+  const getGameName = () => {
+    return m["entry_page.analysis_title.chess"]();
+  }
+
 	//
 
 	import { onMount } from "svelte";
@@ -414,7 +421,7 @@
 			</ul>
 		</article>
 	</section>
-	<section class="absolute top-[25%] lg:top-[50%] left-[50%] lg:left-[25%] -translate-[50%]">
+	<section class="absolute top-[25%] lg:top-[50%] left-[50%] lg:left-[30%] -translate-[50%] w-[75dvw] lg:w-[50dvw]">
 		<article>
 			<h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-8xl font-extrabold whitespace-nowrap uppercase">Shallow View</h1>
 		</article>
@@ -422,14 +429,23 @@
 			<p>{m["entry_page.description"]()}</p>
 		</article>
 		<article>
-			<h2>{m["entry_page.analysis_title"]()}</h2>
 			<button>{m["entry_page.btn_global_analysis"]()}</button>
 		</article>
 	</section>
-	<section class="absolute bottom-0 left-[50%] -translate-x-[50%] translate-y-[25%] w-[75dvw] max-w-[calc(700 * 0.75)] h-[75dvw]
-		lg:top-[50%] lg:right-0 lg:translate-x-[50%] lg:-translate-y-[50%] lg:w-[75dvh] lg:max-w-none md:h-[75dvh]">
-		<img src={chess_board_svg} alt="echecs" /> 
+	<section class="absolute bottom-0 left-[50%] -translate-x-[50%] translate-y-[25%] w-[75dvw] h-[75dvw]
+		lg:top-[50%] lg:right-0 lg:translate-x-[50%] lg:-translate-y-[50%] lg:w-[75dvh] lg:max-w-none lg:h-[75dvh]">
+		<img src={chess_board_svg} alt={getGameName()} /> 
 	</section>
+  <section class="absolute flex bottom-[56.25dvw] right-[50%] -translate-y-[50%] translate-x-[50%]
+    lg:bottom-[6.25%] lg:right-0 lg:translate-y-[50%] lg:translate-x-0 lg:mr-[4rem]">
+    <button class="opacity-[0.5]" onclick={() => {}}> <!--TODO : add when more games cursor-pointer hover:scale-125 transition-transform-->
+        <img src={arrow_left_svg} class="w-[1.75rem]" alt={m["entry_page.btn_previous_game"]()} />
+      </button>
+			<h2 class="text-xl p-2 uppercase">{getGameName()}</h2>
+      <button class="opacity-[0.5]" onclick={() => {}}> <!--TODO : add when more games cursor-pointer hover:scale-125 transition-transform-->
+        <img src={arrow_right_svg} class="w-[1.75rem]" alt={m["entry_page.btn_next_game"]()} />
+      </button>
+  </section>
 </main>
 
 <style>

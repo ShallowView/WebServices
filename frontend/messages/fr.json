@@ -1,8 +1,12 @@
 {
 	"$schema": "https://inlang.com/schema/inlang-message-format",
 	"entry_page": {
-		"description": "Hello, from fr!",
-		"analysis_title": "analyses échecs",
-		"btn_global_analysis": "Voir analyses globales"
+		"description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique harum nihil maiores delectus, architecto eum odit sed praesentium a distinctio nam quo cupiditate laborum consequuntur dolore rerum vel fugit voluptatibus!",
+		"btn_global_analysis": "Voir analyses globales",
+		"analysis_title": {
+			"chess": "analyses échecs"
+		},
+		"btn_previous_game": "Antérieur jeux",
+		"btn_next_game": "Prochain jeux"
 	}
 }
