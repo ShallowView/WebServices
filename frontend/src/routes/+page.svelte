@@ -79,7 +79,7 @@
 	</section>
 	<section class="absolute bottom-0 left-[50%] -translate-x-[50%] translate-y-[25%] w-[75dvw] h-[75dvw]
 		lg:top-[50%] lg:right-0 lg:translate-x-[50%] lg:-translate-y-[50%] lg:w-[75dvh] lg:max-w-none lg:h-[75dvh]">
-		<img src={chess_board_svg} class="rounded-2xl" alt={getGameName()} /> <!--TODO : lazy image loading-->
+		<img src={chess_board_svg} class="rounded-2xl" loading="lazy" alt={getGameName()} /> <!--TODO : lazy image loading-->
 	</section>
   <section class="absolute flex bottom-[56.25dvw] right-[50%] -translate-y-[50%] translate-x-[50%]
     lg:bottom-[6.25%] lg:right-0 lg:translate-y-[50%] lg:translate-x-0 lg:mr-[4rem]">
@@ -97,6 +97,6 @@
   .analysis_button {
     clip-path: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 260 260' preserveAspectRatio='none'%3E%3Cpath d='M 0 25 C 0 -5, -5 0, 80 0 S 160 -5, 160 25, 165 50 80 50, 0 55, 0 25'/%3E%3C/svg%3E");
     border-radius: 13px;
-    box-shadow: 0px -3px 15px 0px rgba(0, 0, 0, 0.3) inset;
+    box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.3) inset;
   }
 </style>
