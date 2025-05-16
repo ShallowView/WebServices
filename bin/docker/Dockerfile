@@ -5,23 +5,24 @@ RUN xcaddy build \
 
 FROM caddy:2.10.0-alpine
 
+ARG DOCKER_FILES_ROOT=bin/docker
+
 ENV CYUSER=caddy
 ENV CYCONFIG=/etc/caddy
 ENV CYROOT=/usr/share/caddy
 
-
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy
 
-COPY Caddyfile.jsonc $CYCONFIG
+COPY $DOCKER_FILES_ROOT/Caddyfile.jsonc $CYCONFIG
 
-#RUN rm ${CYROOT}/index.html 
+RUN rm ${CYROOT}/index.html
 
 RUN mkdir -p $CYROOT/doc $CYROOT/api $CYROOT/master
 RUN echo "apidoc">$CYROOT/doc/index.html
 RUN echo "api">$CYROOT/api/index.html
-RUN echo "dashboard">$CYROOT/master/index.html
+COPY frontend/build $CYROOT/master
 
-
+# Unpriviliged user
 RUN addgroup -S $CYUSER
 RUN adduser -S $CYUSER -G $CYUSER -h $CYROOT
 
