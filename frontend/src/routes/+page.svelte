@@ -32,6 +32,7 @@
 	//
 
 	import Copyright from "./_page/Copyright.svelte";
+	import ImageLoader from "./_components/ImageLoader.svelte";
 
 	let show_copy = $state(false);
 </script>
@@ -79,7 +80,7 @@
 	</section>
 	<section class="absolute bottom-0 left-[50%] -translate-x-[50%] translate-y-[25%] w-[75dvw] h-[75dvw]
 		lg:top-[50%] lg:right-0 lg:translate-x-[50%] lg:-translate-y-[50%] lg:w-[75dvh] lg:max-w-none lg:h-[75dvh]">
-		<img src={chess_board_svg} class="rounded-2xl" loading="lazy" alt={getGameName()} /> <!--TODO : lazy image loading-->
+		<ImageLoader src={chess_board_svg} css_class="rounded-2xl" alt={getGameName()} />
 	</section>
   <section class="absolute flex bottom-[56.25dvw] right-[50%] -translate-y-[50%] translate-x-[50%]
     lg:bottom-[6.25%] lg:right-0 lg:translate-y-[50%] lg:translate-x-0 lg:mr-[4rem]">

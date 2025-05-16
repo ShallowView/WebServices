@@ -1,16 +1,25 @@
 <script lang="ts">
   export let src : string;
   export let alt : string;
+  export let css_class : string;
 
   import { onMount } from "svelte";
 
   let loaded = false;
   let image : HTMLImageElement;
 
-  onMount(() => { image.onload = () => { loaded = true; }; });
+  let intersecting = false;
+  let container;
+
+  onMount(() => { 
+    // TODO
+    image.onload = () => { loaded = true; }; 
+  });
 </script>
 
-<img {src} {alt} class:loaded bind:this={image} loading="lazy" />
+<div>
+  <img {src} {alt} class={css_class} class:loaded bind:this={image} loading="lazy" />
+</div>
 
 <style>
   img {
