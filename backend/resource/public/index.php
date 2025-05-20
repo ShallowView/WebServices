@@ -2,7 +2,7 @@
 
 const PROJECT_VENDOR = "ShallowView";
 const PROJECT_PATH = "../..";
-const PROJECT_RESOURCES_PATH = PROJECT_PATH."/test-resource";
+const PROJECT_RESOURCES_PATH = PROJECT_PATH."/resource";
 const DEVELOPMENT_MODE = true;
 
 // Adds a classes autoloader.
@@ -18,7 +18,11 @@ spl_autoload_register(function(string $class){
 $ws = new \SBPGames\Framework\WebSystem(
 	new SBPGames\Framework\Service\ServiceContainer(
 		new \SBPGames\Framework\Service\ServiceConfig(PROJECT_RESOURCES_PATH),
-		[]
+		[
+			function(): \ShallowView\API\JSONFilesService{
+				return new \ShallowView\API\JSONFilesService(PROJECT_PATH);
+			}
+		]
 	),
 	[
 		\ShallowView\API\APIApp::class
