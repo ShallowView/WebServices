@@ -7,6 +7,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use SBPGames\Framework\App;
 use SBPGames\Framework\WebSystem;
 use ShallowView\API\Controller\APIController;
+use ShallowView\API\Controller\GraphController;
 
 /**
  * @package ShallowView\API
@@ -19,7 +20,8 @@ class APIApp extends App{
 
 	public function __construct(WebSystem $context){
 		parent::__construct($context, [
-			APIController::class
+			APIController::class,
+			GraphController::class
 		]);
 	}
 
