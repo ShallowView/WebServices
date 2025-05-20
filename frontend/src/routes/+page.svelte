@@ -54,7 +54,7 @@
 				{#each locales as locale}
 					<li>
 						<button class="cursor-pointer hover:scale-125 transition-transform" onclick={() => { setLocale(locale); }}>
-							<img src={locales_ext[locale].img_src} class="w-[2rem]" alt={locales_ext[locale].full_title}/>
+							<img src={locales_ext[locale].img_src} class="w-[2rem]" alt={locales_ext[locale].full_title} />
 						</button>
 					</li>
 				{/each}
@@ -71,7 +71,7 @@
 		<article>
 			<a href={getGameGlobalAnalysis()} class="flex flex-col justify-center items-center h-[50px] w-[260px]
         hover:[&>span]:opacity-[40%] hover:[&>button]:translate-y-[5px]">
-        <button class="analysis_button h-[50px] w-[260px] text-xl cursor-pointer transition-all">
+        <button class="analysis_button h-[50px] w-[260px] bg-[white] text-xl cursor-pointer transition-all">
           {m["entry_page.btn_global_analysis"]()}
         </button>
         <span class="absolute bottom-[-10px] w-[200px] h-[20px] bg-[black] rounded-full blur-xl opacity-[60%] transition-all"></span>
