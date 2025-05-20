@@ -4,6 +4,10 @@
 	let show = $state(false);
 </script>
 
+<svelte:head>
+  <title>Shallow View · Chess Analysis</title>
+</svelte:head>
+
 <PlotlyPopup bind:showModal={show} />
 
 <button class="opacity-[0.8] text-lg underline underline-offset-3 cursor-pointer" onclick={() => { show = true; }}>Copyright &copy;</button>

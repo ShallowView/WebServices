@@ -88,7 +88,7 @@
     <button class="opacity-[0.5]" onclick={() => {}}> <!--TODO : add when more games cursor-pointer hover:scale-125 transition-transform-->
         <img src={arrow_left_svg} class="w-[1.75rem]" alt={m["entry_page.btn_previous_game"]()} />
       </button>
-			<h2 class="text-xl p-2 uppercase">{getGameName()}</h2>
+			<h2 class="text-xl p-2 uppercase no-wrap">{getGameName()}</h2>
       <button class="opacity-[0.5]" onclick={() => {}}> <!--TODO : add when more games cursor-pointer hover:scale-125 transition-transform-->
         <img src={arrow_right_svg} class="w-[1.75rem]" alt={m["entry_page.btn_next_game"]()} />
       </button>
