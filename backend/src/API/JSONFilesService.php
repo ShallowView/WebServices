@@ -4,7 +4,6 @@ namespace ShallowView\API;
 
 use Psr\Http\Message\StreamInterface;
 use SBPGames\Framework\Message\FileStream;
-use SBPGames\Framework\NotImplementedException;
 use SBPGames\Framework\Service\Service;
 
 /**
@@ -73,8 +72,6 @@ class JSONFilesService extends Service{
 	// FUNCTIONS
 	public function loadStream(string $path, string $name): StreamInterface{
 		$file = $this->getDestName($path, $name);
-
-		var_dump($path, $name, $file);
 
 		if(!is_file($file) || !is_readable($file))
 			throw new \UnexpectedValueException(sprintf(

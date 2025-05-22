@@ -5,6 +5,7 @@ namespace ShallowView\API\Controller;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use SBPGames\Framework\Controller;
+use SBPGames\Framework\JSONResponseHelper;
 use SBPGames\Framework\Message\Method;
 use SBPGames\Framework\Message\Status;
 use SBPGames\Framework\Routing\Route;
@@ -31,7 +32,7 @@ class GraphController extends Controller{
 	public static function getRoutes(): array{
 		return [
 			new Route(
-				"/^\/(?'analysis'[a-z]+)\/(?'dirname'[a-z]+(\/[a-z]+)*\/)?(?'file'[a-z]+)$/",
+				"/^\/(?'analysis'[a-z]+)\/(?'type'[a-z]+)\/(?'file'[a-z]+)$/",
 				[ Method::GET->value => "getAnalysis" ]
 			)
 		];
@@ -42,18 +43,24 @@ class GraphController extends Controller{
 		ServerRequestInterface $request, ResponseInterface $response
 	): ResponseInterface{
 		// Retrieves and parses query params.
-		$analysis = $request->getAttribute("analysis");
-		$dirname = str_replace("/", DIRECTORY_SEPARATOR,
-			$request->getAttribute("dirname")
-		);
+		$path = implode(DIRECTORY_SEPARATOR, [
+			$request->getAttribute("analysis"),
+			$request->getAttribute("type")
+		]);
 		$file = $request->getAttribute("file");
 
 		// Writes response.
-		return $response
-			->withStatus(Status::OK->value)
-			->withHeader("Content-Type", "application/json")
-			->withBody($this->getJSONFiles()->loadStream(
-				$analysis.DIRECTORY_SEPARATOR.$dirname, $file
-			));
+		try{
+			return $response
+				->withStatus(Status::OK->value)
+				->withHeader("Content-Type", "application/json")
+				->withBody($this->getJSONFiles()->loadStream($path, $file));
+		}catch(\UnexpectedValueException $_){
+			return (new JSONResponseHelper($response))->writeError(
+				Status::NOT_FOUND,
+				"No such graph.",
+				"about:blank"
+			);
+		}
 	}
 }
