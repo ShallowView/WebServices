@@ -1,0 +1,127 @@
+openapi: 3.1.0
+
+info:
+  title: ShallowView API
+  summary: ShallowView website public API.
+  version: 1.0.0-b.1
+  license:
+    name: LGPL-3.0-only
+    url: "https://www.gnu.org/licenses/lgpl-3.0.html"
+
+servers:
+  - url: "https://api.shallowview.org/"
+    description: API base url
+
+paths:
+  /:
+    get:
+      summary: Retrieves API information.
+      operationId: findAPI
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Api"
+  /ekaekatai/procrastinate:
+    post:
+      summary: Makes Ekaekatai procrastinate.
+      operationId: procrastinate
+
+  /graph/{analysis}:
+    get:
+      summary: Retrieves a list of graphs grouped by type.
+      operationId: findAllGraphs
+      tags:
+        - Graph
+      parameters:
+        - name: analysis
+          in: path
+          description: Identifier of the analysis.
+          schema:
+            type: string
+          required: true
+          example: "chess"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GraphsList"
+        404:
+          $ref: "responses.yaml#/404NotFound"
+  /graph/{analysis}/{type}:
+    get:
+      summary: Retrieves a list of graphs of a type.
+      operationId: findGraphs
+      tags:
+        - Graph
+      parameters:
+        - name: analysis
+          in: path
+          description: Identifier of the analysis.
+          schema:
+            type: string
+          required: true
+          example: "chess"
+        - name: type
+          in: path
+          description: Type of the graphs.
+          schema:
+            type: string
+          required: true
+          example: "louvain"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Graphs"
+        404:
+          $ref: "responses.yaml#/404NotFound"
+  /graph/{analysis}/{type}/{file}:
+    get:
+      summary: Retrieves data of a graph.
+      operationId: findGraph
+      tags:
+        - Graph
+      parameters:
+        - name: analysis
+          in: path
+          description: Identifier of the analysis.
+          schema:
+            type: string
+          required: true
+          example: "chess"
+        - name: type
+          in: path
+          description: Type of the graphs.
+          schema:
+            type: string
+          required: true
+          example: "louvain"
+        - name: type
+          in: path
+          description: Graph identifier.
+          schema:
+            type: string
+          required: true
+          example: "initial"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        404:
+          $ref: "responses.yaml#/404NotFound"
+
+components:
+  responses:
+    $ref: "responses.yaml"
+  schemas:
+    $ref: "schemas/_index.yaml"

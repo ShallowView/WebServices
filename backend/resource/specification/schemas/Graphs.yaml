@@ -1,0 +1,7 @@
+type: array
+description: List of available graphs grouped by type.
+items:
+  type: string
+  format: uri
+  example: https://api.shallowview.org/graph/{analysis}/{type}/{file}
+readOnly: true

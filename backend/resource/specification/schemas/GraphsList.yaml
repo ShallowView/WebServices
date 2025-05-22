@@ -1,0 +1,8 @@
+type: object
+description: List of all available graphs.
+properties:
+  louvain:
+    $ref: "Graphs.yaml"
+required:
+  - louvain
+readOnly: true
