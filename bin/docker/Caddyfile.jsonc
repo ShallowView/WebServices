@@ -47,7 +47,7 @@
 						"host":["doc.shallowview.org"]
 					}],
 					"handle":[{
-						"handler":"file_server", "root":"{http.vars.root}/doc"
+						"handler":"file_server", "root":"{http.vars.root}/doc/"
 					}]
 				},
 				{
@@ -55,7 +55,8 @@
 						"host":["api.shallowview.org"]
 					}],
 					"handle":[{
-						"handler":"file_server", "root":"{http.vars.root}/api"
+						"handler":"file_server",
+						"root":"{http.vars.root}/api/resource/public"
 					}]
 				},
 

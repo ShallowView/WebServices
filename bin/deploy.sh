@@ -2,15 +2,12 @@
 
 #shellcheck source=dockerUtils.sh
 source "bin/dockerUtils.sh"
-#shellcheck source=dockerUtils.sh
+#shellcheck source=config.sh
 source "bin/config.sh"
 # ---
 mode=${1-"prod"}
 
-# ---
-# BUG: Build will wait for changes because of paraglideVitePlugin
-#npm run -w frontend build
-
+# ---
 stop $DOCKER_CONTAINER_NAME
 
 removeImage $DOCKER_IMAGE_REFERENCE
