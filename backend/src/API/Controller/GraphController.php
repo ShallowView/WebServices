@@ -61,7 +61,8 @@ class GraphController extends Controller{
 					)
 				);
 
-				return is_string($v) ? strval($uri)
+				return is_string($v) ?
+					preg_replace("/^(.+)\.[a-z]+$/", "$1", strval($uri))
 					: self::convertPathsToUrls($uri, $v);
 			},
 			array_keys($files), $files
