@@ -1,13 +1,17 @@
 <script lang="ts">
-	import OpeningsNetworkGraph from "./_page/OpeningsNetworkGraph.svelte";
+	import ModalNetworkGraph from "../../_components/ModalNetworkGraph.svelte";
 
-	let show_openings_network_graph = $state(false);
+	import openings_data from "$lib/output (1).json";
 </script>
 
 <svelte:head>
   <title>Shallow View · Chess Analysis</title>
 </svelte:head>
 
-<OpeningsNetworkGraph bind:showModal={show_openings_network_graph} />
-
-<button class="opacity-[0.8] text-lg underline underline-offset-3 cursor-pointer" onclick={() => { show_openings_network_graph = true; }}>Copyright &copy;</button>
+<main>
+	<h2>List of analysis</h2>
+	<section class="grid">
+		
+		<ModalNetworkGraph nodes={openings_data.nodes} edges={openings_data.edges} />
+	</section>
+</main>

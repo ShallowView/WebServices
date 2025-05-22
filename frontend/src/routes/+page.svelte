@@ -1,4 +1,8 @@
 <script lang="ts">
+	import { useLazyImage } from "svelte-lazy-image";
+
+	import Copyright from "./_page/Copyright.svelte";
+	
 	// Locales
 
 	import { setLocale } from "$lib/paraglide/runtime";
@@ -16,7 +20,8 @@
 
 	// Game Analysis Selector
 
-	import chess_board_svg from "$lib/images/chess_board.svg"; // taken from https://www.vecteezy.com/vector-art/27622972-wooden-chessboard-with-chess-pieces-gameboard-leisure-activity
+	// image taken from https://www.vecteezy.com/vector-art/27622972-wooden-chessboard-with-chess-pieces-gameboard-leisure-activity
+	import chess_board_svg from "$lib/images/chess_board.svg"; 
 
   import arrow_left_svg from "$lib/icons/arrow-left.svg";
   import arrow_right_svg from "$lib/icons/arrow-right.svg";
@@ -28,26 +33,16 @@
   const getGameGlobalAnalysis = () => {
     return "/analysis/chess";
   }
-
-	//
-
-	import { useLazyImage } from "svelte-lazy-image";
-
-	import Copyright from "./_page/Copyright.svelte";
-
-	let show_copy = $state(false);
 </script>
 
 <svelte:head>
   <title>Shallow View</title>
 </svelte:head>
 
-<Copyright bind:showModal={show_copy} />
-
 <main class="w-dvw h-dvh">
 	<section class="absolute flex justify-between w-full top-[6.25%] left-0 -translate-y-[50%]">
 		<article class="ml-[4rem]">
-			<button class="opacity-[0.8] text-lg underline underline-offset-3 cursor-pointer" onclick={() => { show_copy = true; }}>Copyright &copy;</button>
+			<Copyright />
 		</article>
 		<article class="mr-[4rem]">
 			<ul class="flex justify-end list-none space-x-[2rem]">
