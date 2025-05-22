@@ -15,7 +15,8 @@ class JSONFilesService extends Service{
 	private const SERVICE_IDENTIFIER = "jsonFiles";
 	private const MANDATORY_CONFIG_FIELDS = ["directory"];
 
-	private const JSON_FILE_FORMAT = "%s/%s/%s/%s.json";
+	private const JSON_FILE_PATTERN = "/^.+\.json$/";
+	private const JSON_FILE_FORMAT = "%s/%s.json";
 
 	private readonly string $projectPath;
 	private readonly string $directory;
@@ -40,11 +41,14 @@ class JSONFilesService extends Service{
 		return $this->directory;
 	}
 
-	private function getDestName(string $path, string $name): string{
-		return sprintf(self::JSON_FILE_FORMAT,
+	private function getDirPath(string $path): string{
+		return implode(DIRECTORY_SEPARATOR, [
 			$this->projectPath, $this->getDirectory(),
-			rtrim($path, DIRECTORY_SEPARATOR), $name
-		);
+			trim($path, DIRECTORY_SEPARATOR)
+		]);
+	}
+	private function getFilePath(string $path, string $name): string{
+		return sprintf(self::JSON_FILE_FORMAT, $this->getDirPath($path), $name);
 	}
 
 	// SETTERS
@@ -70,8 +74,35 @@ class JSONFilesService extends Service{
 	}
 
 	// FUNCTIONS
+	/** @return array<int|string, string|array> */
+	public function listFiles(string $path): array{
+		$dir = $this->getDirPath($path);
+
+		if(!is_dir($dir) || !is_readable($dir))
+			throw new \UnexpectedValueException(sprintf(
+				"%s: No such directory or isn't readable (%s);",
+				static::class, $dir
+			));
+
+		$files = scandir($dir);
+		$dirs = [];
+
+		foreach($files as $file){
+			$realPath = $dir.DIRECTORY_SEPARATOR.$file;
+
+			if(!in_array($file, [".", ".."]) && is_dir($realPath))
+				$dirs[$file] = $this->listFiles($realPath);
+		}
+
+		return array_merge(
+			array_filter($files, function(string|array $v): bool{
+				return preg_match(self::JSON_FILE_PATTERN, $v);
+			}),
+			$dirs
+		);
+	}
 	public function loadStream(string $path, string $name): StreamInterface{
-		$file = $this->getDestName($path, $name);
+		$file = $this->getFilePath($path, $name);
 
 		if(!is_file($file) || !is_readable($file))
 			throw new \UnexpectedValueException(sprintf(
