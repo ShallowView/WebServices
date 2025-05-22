@@ -1,0 +1,9 @@
+Api:
+  $ref: "Api.yaml"
+Error:
+  $ref: "Error.yaml"
+
+GraphsList:
+  $ref: "GraphsList.yaml"
+Graphs:
+  $ref: "Graphs.yaml"
