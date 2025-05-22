@@ -11,11 +11,13 @@
 
   import en_svg from "$lib/icons/locales_flag/en.svg";
   import fr_svg from "$lib/icons/locales_flag/fr.svg";
+	import latin_svg from "$lib/icons/locales_flag/latin.svg";
 
   interface ILocalExt { [key : string] : { full_title : string, img_src : string } }
   const locales_ext : ILocalExt = {
       "en" : { full_title : "english", img_src : en_svg },
-      "fr" : { full_title : "français", img_src : fr_svg }
+      "fr" : { full_title : "français", img_src : fr_svg },
+			"latin" : { full_title : "latin", img_src : latin_svg }
   };
 
 	// Game Analysis Selector
@@ -49,7 +51,7 @@
 				{#each locales as locale}
 					<li>
 						<button class="cursor-pointer hover:scale-125 transition-transform" onclick={() => { setLocale(locale); }}>
-							<img src={locales_ext[locale].img_src} class="w-[2rem]" alt={locales_ext[locale].full_title} />
+							<img src={locales_ext[locale].img_src} class="flag-shadow rounded-sm w-[2rem]" alt={locales_ext[locale].full_title} />
 						</button>
 					</li>
 				{/each}
@@ -91,6 +93,10 @@
 </main>
 
 <style>
+	.flag-shadow {
+		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
+	}
+
   .analysis_button {
     clip-path: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 260 260' preserveAspectRatio='none'%3E%3Cpath d='M 0 25 C 0 -5, -5 0, 80 0 S 160 -5, 160 25, 165 50 80 50, 0 55, 0 25'/%3E%3C/svg%3E");
     border-radius: 13px;

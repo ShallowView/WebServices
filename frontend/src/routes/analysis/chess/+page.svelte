@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Loader from "../../_components/Loader.svelte";
 	import ModalNetworkGraph from "../../_components/ModalNetworkGraph.svelte";
 
 	let urls_promise : Promise<{ plot_type : string, plot_urls : string }> = fetch("http://127.0.0.1:31900/graph/chess").then(response => { 
@@ -15,21 +16,20 @@
   <title>Shallow View · Chess Analysis</title>
 </svelte:head>
 
-<main>
-	<h2>List of analysis</h2>
+<main class="min-h-dvh flex justify-center items-center">
 	{#await urls_promise}
-		<p>loading...</p>
+		<Loader />
 	{:then plots} 
-		<section class="grid">
+		<div class="h-dvh w-dvw flex justify-center items-center">
 			{#each Object.entries(plots) as [plot_type, plot_urls]}
 				{#each plot_urls as plot_url}
 					{#await loadGraph(plot_url)}
-						<p>loading...</p>
+						<Loader />
 					{:then plot_json}
 						<ModalNetworkGraph nodes={plot_json.nodes} edges={plot_json.edges} />
 					{/await}
 				{/each}
 			{/each}
-		</section>
+		</div>
 	{/await}
 </main>

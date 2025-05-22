@@ -1,16 +1,19 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import ModalWindow from "./ModalWindow.svelte";
   import Graph from "graphology";
+  import type { Settings } from "sigma/settings";
+  import type { NodeDisplayData, PartialButFor, PlainObject } from "sigma/types";
+  import zoom_in_svg from "$lib/icons/zoom-in.svg";
+  import zoom_out_svg from "$lib/icons/zoom-out.svg";
+  import radio_button_svg from "$lib/icons/radio-button.svg";
 
   interface IGraphNode { id : string, type : string, position : { x : number, y : number}, community : number };
   interface IGraphEdge { source : string, target : string, weight : number };  
   interface IGraphPartition { id : number, main_opening : string, player_count : number, players : string[], variation_count : number, variations : string[], average_max_elo : number };
-  let { nodes, edges, partitions, ...others } : { nodes : IGraphNode[], edges : IGraphEdge[], partitions? : IGraphPartition[] } = $props();
+  let { nodes, edges, partitions } : { nodes : IGraphNode[], edges : IGraphEdge[], partitions? : IGraphPartition[] } = $props();
 
-  let preview_div : HTMLDivElement;
   let plot_div : HTMLDivElement;
-  let plot_renderer : any | undefined;
+  let plot_renderer;
   
   const graph = new Graph();
 
@@ -39,53 +42,136 @@
       graph.addEdge(edge.source, edge.target, { size : edge.weight });
     });
 
-    const preview_renderer = new Sigma(graph, preview_div, { enableCameraPanning : false, enableCameraZooming : false, enableEdgeEvents : false, defaultDrawNodeHover : undefined });
-    plot_renderer = new Sigma(graph, plot_div, { allowInvalidContainer : true, autoRescale : true, autoCenter : true });
+    plot_renderer = new Sigma(graph, plot_div, { 
+      allowInvalidContainer : true, 
+      autoRescale : true, 
+      autoCenter : true, 
+      defaultDrawNodeLabel : drawLabel,
+      defaultDrawNodeHover : drawHover
+    });
   });
+
+  const TEXT_COLOR = "#000000";
+
+  function drawRoundRect(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, radius: number) : void {
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + width - radius, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+    ctx.lineTo(x + width, y + height - radius);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+    ctx.lineTo(x + radius, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+    ctx.lineTo(x, y + radius);
+    ctx.quadraticCurveTo(x, y, x + radius, y);
+    ctx.closePath();
+  }
+
+  function drawHover(context: CanvasRenderingContext2D, data: PlainObject, settings: PlainObject) {
+    const size = settings.labelSize;
+    const font = settings.labelFont;
+    const weight = settings.labelWeight;
+    const subLabelSize = size - 2;
+
+    const label = data.label;
+    const subLabel = data.tag !== "unknown" ? data.tag : "";
+    const clusterLabel = data.clusterLabel;
+
+    // Then we draw the label background
+    context.beginPath();
+    context.fillStyle = "#fff";
+    context.shadowOffsetX = 0;
+    context.shadowOffsetY = 2;
+    context.shadowBlur = 8;
+    context.shadowColor = "#000";
+
+    context.font = `${weight} ${size}px ${font}`;
+    const labelWidth = context.measureText(label).width;
+    context.font = `${weight} ${subLabelSize}px ${font}`;
+    const subLabelWidth = subLabel ? context.measureText(subLabel).width : 0;
+    context.font = `${weight} ${subLabelSize}px ${font}`;
+    const clusterLabelWidth = clusterLabel ? context.measureText(clusterLabel).width : 0;
+
+    const textWidth = Math.max(labelWidth, subLabelWidth, clusterLabelWidth);
+
+    const x = Math.round(data.x);
+    const y = Math.round(data.y);
+    const w = Math.round(textWidth + size / 2 + data.size + 3);
+    const hLabel = Math.round(size / 2 + 4);
+    const hSubLabel = subLabel ? Math.round(subLabelSize / 2 + 9) : 0;
+    const hClusterLabel = Math.round(subLabelSize / 2 + 9);
+
+    drawRoundRect(context, x, y - hSubLabel - 12, w, hClusterLabel + hLabel + hSubLabel + 12, 5);
+    context.closePath();
+    context.fill();
+
+    context.shadowOffsetX = 0;
+    context.shadowOffsetY = 0;
+    context.shadowBlur = 0;
+
+    // And finally we draw the labels
+    context.fillStyle = TEXT_COLOR;
+    context.font = `${weight} ${size}px ${font}`;
+    context.fillText(label, data.x + data.size + 3, data.y + size / 3);
+
+    if (subLabel) {
+      context.fillStyle = TEXT_COLOR;
+      context.font = `${weight} ${subLabelSize}px ${font}`;
+      context.fillText(subLabel, data.x + data.size + 3, data.y - (2 * size) / 3 - 2);
+    }
+
+    context.fillStyle = data.color;
+    context.font = `${weight} ${subLabelSize}px ${font}`;
+    context.fillText(clusterLabel, data.x + data.size + 3, data.y + size / 3 + 3 + subLabelSize);
+  }
+
+  function drawLabel(context: CanvasRenderingContext2D, data: PartialButFor<NodeDisplayData, "x" | "y" | "size" | "label" | "color">, settings: Settings) : void {
+    if (!data.label) return;
+
+    const size = settings.labelSize,
+      font = settings.labelFont,
+      weight = settings.labelWeight;
+
+    context.font = `${weight} ${size}px ${font}`;
+    const width = context.measureText(data.label).width + 8;
+
+    context.fillStyle = "#ffffffcc";
+    context.fillRect(data.x + data.size, data.y + size / 3 - 15, width, 20);
+
+    context.fillStyle = "#000";
+    context.fillText(data.label, data.x + data.size + 3, data.y + size / 3);
+  }
 
   const calculateNodeSize = (id : string) => {
     return edges.filter((edges : any) => edges.source === id || edges.target === id).length;
   }
-
-  let showModal : boolean = $state(false);
-
-  $effect(() => { if (showModal && plot_renderer) { plot_renderer.resize(); plot_renderer.refresh(); } })
 </script>
 
-<section class="opacity-[0.9] rounded-2xl bg-[grey] w-[20rem]">
-  <article>
-    <button onclick={() => { showModal = true; }} aria-label="show plot">
-      <div bind:this={preview_div} class="w-[20rem] h-[20rem] cursor-pointer"></div>
-    </button>
-  </article>
-  <article class="p-8">
-    aaa
-  </article>
-  <article class="p-8">
-    <!-- svelte-ignore a11y_click_events_have_key_events -->
-    <!-- svelte-ignore a11y_no_static_element_interactions -->
-    <!-- svelte-ignore a11y_consider_explicit_label -->
-    <!-- svelte-ignore a11y_missing_attribute -->
-    <a onclick={() => {}} class="flex flex-col justify-center items-center h-[50px] w-[260px] hover:[&>span]:opacity-[40%] hover:[&>button]:translate-y-[5px]">
-      <button class="analysis_button h-[50px] w-[260px] bg-[white] text-xl cursor-pointer transition-all">
-            aaa
+<div class="flex bg-[rgba(0,0,0,0.05)]">
+  <section class="rounded-4xl shadow-2xl shadow-grey">
+    <div bind:this={plot_div} class="w-[70dvw] h-dvh"></div>
+    <!--
+    <div class="absolute bottom-0 left-0">
+      <button onclick={() => {}}>
+        <img src={zoom_in_svg} alt="zoom in" />
       </button>
-      <span class="absolute bottom-[-10px] w-[200px] h-[20px] bg-[black] rounded-full blur-xl opacity-[60%] transition-all"></span>
-    </a>
-  </article>
-</section>
-
-<ModalWindow bind:showModal>
-  {#snippet header()}
-    <h2>a</h2>
-  {/snippet}
-  <div bind:this={plot_div} class="w-[90dvw] h-[80dvh]"></div>
-</ModalWindow>
-
-<style>
-    .analysis_button {
-    clip-path: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 260 260' preserveAspectRatio='none'%3E%3Cpath d='M 0 25 C 0 -5, -5 0, 80 0 S 160 -5, 160 25, 165 50 80 50, 0 55, 0 25'/%3E%3C/svg%3E");
-    border-radius: 13px;
-    box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.3) inset;
-  }
-</style>
+      <button onclick={() => {}}>
+        <img src={zoom_out_svg} alt="zoom in" />
+      </button>
+      <button onclick={() => {}}>
+        <img src={radio_button_svg} alt="zoom in" />
+      </button>
+    </div>
+    -->
+  </section>
+  <section>
+    <h3 class="mt-4 p-8 text-4xl">Algorithme de Louvain</h3>
+    <p class="p-16 pt-8 text-justify">
+      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Doloremque, quasi. Est aperiam laboriosam reprehenderit nostrum atque aspernatur! Nemo tenetur, vero et aut debitis autem, alias, officia natus dolores quaerat consequuntur?
+      <br><br>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis mollitia distinctio ducimus necessitatibus sint laborum explicabo, accusamus, hic cumque error, harum dicta libero laboriosam illum amet quasi iusto in tempore.
+      <br><br>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum rem temporibus vero similique natus, numquam inventore, enim dolores ex officiis sint, mollitia nemo nam rerum saepe quaerat suscipit quia cumque.
+    </p>
+  </section>
+</div>
