@@ -80,11 +80,19 @@ class GraphController extends Controller{
 		]);
 
 		// Writes response.
-		return $jsonRes->write(
-			self::convertPathsToUrls($request->getUri(),
-				$this->getJSONFiles()->listFiles($path)
-			)
-		);
+		try{
+			return $jsonRes->write(
+				self::convertPathsToUrls($request->getUri(),
+					$this->getJSONFiles()->listFiles($path)
+				)
+			);
+		}catch(\UnexpectedValueException $_){
+			return (new JSONResponseHelper($response))->writeError(
+				Status::NOT_FOUND,
+				"No such analysis or graph type.",
+				"about:blank"
+			);
+		}
 	}
 	public function getAnalysis(
 		ServerRequestInterface $request, ResponseInterface $response
