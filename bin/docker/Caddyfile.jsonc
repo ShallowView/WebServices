@@ -2,6 +2,7 @@
     "admin": {
         "disabled": true
     },
+
     "logging":{
 		"sink": {
 			"writer": {"output": "stdout"}
@@ -12,6 +13,7 @@
 			"level": "INFO"
 		}}
     },
+
     "apps":{
         "http":{"servers":{"ShallowView":{
 			"listen":[":80"],
@@ -55,8 +57,8 @@
 						"host":["api.shallowview.org"]
 					}],
 					"handle":[{
-						"handler":"file_server",
-						"root":"{http.vars.root}/api/resource/public"
+						"handler":"php",
+						"root":"{http.vars.root}/api/resource/public/index.php"
 					}]
 				},
 
@@ -68,6 +70,8 @@
 					}]
 				}
 			]
-		}
-    }}}
+		}}},
+
+		"frankenphp": {}
+	}
 }

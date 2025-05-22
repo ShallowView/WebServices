@@ -1,7 +1,17 @@
-FROM caddy:2.10.0-builder-alpine AS builder
+FROM dunglas/frankenphp:1.6.0-builder-php8.4.7-alpine AS builder
 
-RUN xcaddy build \
-    --with github.com/caddyserver/jsonc-adapter
+COPY --from=caddy:2.10.0-builder-alpine /usr/bin/xcaddy /usr/bin/xcaddy
+
+RUN CGO_ENABLED=1 \
+    XCADDY_SETCAP=1 \
+    XCADDY_GO_BUILD_FLAGS="-ldflags='-w -s' -tags=nobadger,nomysql,nopgx" \
+    CGO_CFLAGS=$(php-config --includes) \
+    CGO_LDFLAGS="$(php-config --ldflags) $(php-config --libs)" \
+    xcaddy build \
+		--output /usr/local/bin/frankenphp \
+		--with github.com/caddyserver/jsonc-adapter \
+        --with github.com/dunglas/frankenphp=./ \
+        --with github.com/dunglas/frankenphp/caddy=./caddy/
 
 FROM node:24.0.2-alpine3.21 AS node-base
 
@@ -24,20 +34,19 @@ RUN sh bin/compileDocs.sh \
 	backend/resource/public/doc
 
 # Final
-FROM caddy:2.10.0-alpine
+FROM dunglas/frankenphp:1.6.0-php8.4.7-alpine
 
 ARG DOCKER_FILES_ROOT=bin/docker
 
 ENV CYUSER=caddy
-ENV CYCONFIG=/etc/caddy
+ENV CYCONFIG=/etc/frankenphp/
 ENV CYROOT=/usr/share/caddy
 
-COPY --from=builder /usr/bin/caddy /usr/bin/caddy
+COPY --from=builder /usr/local/bin/frankenphp /usr/local/bin/frankenphp
 
 COPY $DOCKER_FILES_ROOT/Caddyfile.jsonc $CYCONFIG
 
 # Copies service files.
-RUN rm ${CYROOT}/index.html
 RUN mkdir -p $CYROOT/master $CYROOT/api $CYROOT/doc
 
 COPY --from=frontend /usr/src/webservices/frontend/build $CYROOT/master
@@ -57,5 +66,5 @@ RUN chown -R $CYUSER:$CYUSER $XDG_CONFIG_HOME $XDG_DATA_HOME
 USER $CYUSER
 
 CMD ["sh","-c",\
-    "caddy run --config $CYCONFIG/Caddyfile.jsonc --adapter jsonc"\
+    "frankenphp run --config $CYCONFIG/Caddyfile.jsonc --adapter jsonc"\
 ]
