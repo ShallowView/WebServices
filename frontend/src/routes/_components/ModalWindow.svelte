@@ -22,9 +22,7 @@
       <section><button class="cursor-pointer" onclick={close}><img src={close_svg} class="w-[1.75rem]" alt="close" /></button></section>
     </header>
     <hr class="pb-2 opacity-[0.3]" />
-    <main>
-      {@render children?.()}
-    </main>
+    {@render children?.()}
   </div>
 </dialog>
 
