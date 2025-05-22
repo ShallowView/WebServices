@@ -3,7 +3,7 @@ openapi: 3.1.0
 info:
   title: ShallowView API
   summary: ShallowView website public API.
-  version: 1.0.0-b.1
+  version: 1.0.0-b.2
   license:
     name: LGPL-3.0-only
     url: "https://www.gnu.org/licenses/lgpl-3.0.html"

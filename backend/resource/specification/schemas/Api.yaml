@@ -6,7 +6,7 @@ properties:
   version:
     type: string
     pattern: ^(?:0|[1-9]\d*).(?:0|[1-9]\d*).(?:0|[1-9]\d*)-(?:a|b|s|rc).(?:0|[1-9]\d*)$
-    default: 1.0.0-b.1
+    default: 1.0.0-b.2
   authors:
     type: array
     items:

@@ -37,7 +37,7 @@ class APIController extends Controller{
 
 		return $jsonRes->write([
 			"description" => "ShallowView dashboard public API.",
-			"version" => "1.0.0-b.1",
+			"version" => "1.0.0-b.2",
 			"authors" => [
 				[
 					"username" => "Xibitol",
