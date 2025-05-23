@@ -1,0 +1,31 @@
+type: object
+description: Error specified by RFC 7807.
+properties:
+  type:
+    type: string
+    format: uri
+    default: "about:blank"
+  title:
+    type: string
+    description: HTTP status phrase
+  status:
+    type: integer
+    format: int16
+    description: HTTP status code
+    minimum: 100
+    maximum: 599
+  detail:
+    type: string
+    description: Complete explanation of the error
+  instance:
+    type: string
+    format: uri
+    description: Link to documentation page/section about the error
+    default: "https://doc.shallowview.org/"
+required:
+  - type
+  - title
+  - status
+  - detail
+  - instance
+readOnly: true
