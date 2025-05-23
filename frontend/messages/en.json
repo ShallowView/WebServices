@@ -1,0 +1,12 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"entry_page": {
+		"description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat veritatis animi, quasi inventore voluptas ab, ducimus ut, sunt totam harum quidem voluptatibus dolorum dolor aspernatur est veniam sequi a non.",
+		"btn_global_analysis": "View global analysis",
+		"analysis_title": {
+			"chess": "Chess analysis"
+		},
+		"btn_previous_game": "Previous game",
+		"btn_next_game": "Next game"
+	}
+}
