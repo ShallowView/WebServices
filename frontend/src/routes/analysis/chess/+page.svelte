@@ -2,12 +2,11 @@
 	import Loader from "../../_components/Loader.svelte";
 	import ModalNetworkGraph from "../../_components/ModalNetworkGraph.svelte";
 
-	let urls_promise : Promise<{ plot_type : string, plot_urls : string }> = fetch("http://127.0.0.1:31900/graph/chess").then(response => { 
+	let urls_promise : Promise<{ plot_type : string, plot_urls : string }> = fetch("http://api.shallowview.org/graph/chess").then(response => { 
 		return response.json(); 
 	});
 
 	const loadGraph = (url : string) : Promise<any> => {
-		url = url.replace("api.shallowview.org", "127.0.0.1"); // TODO : just keep while on localhost
 		return fetch(url).then(response => { return response.json(); });
 	};
 </script>
