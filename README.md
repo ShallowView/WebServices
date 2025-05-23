@@ -1,9 +1,14 @@
 # Web Services [![License: LGPL v3](https://img.shields.io/badge/License-LGPL_v3-orange.svg)](COPYING.LESSER)
 _Soon..._
 
-> Version: **v0.0.0**
+> Version: **v1.0.0**
 
 ## Documentation
+
+- http://shallowview.org/
+- http://api.shallowview.org/ (api-v1.0.0-b.1)
+- http://doc.shallowview.org/
+
 ### Technician installation guide
 _Soon..._
 ### Developer preparation guide
