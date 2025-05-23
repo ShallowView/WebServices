@@ -6,7 +6,7 @@
 		"analysis_title": {
 			"chess": "analyses échecs"
 		},
-		"btn_previous_game": "Antérieur jeux",
-		"btn_next_game": "Prochain jeux"
+		"btn_previous_game": "Jeu antérieur",
+		"btn_next_game": "Prochain jeu"
 	}
 }

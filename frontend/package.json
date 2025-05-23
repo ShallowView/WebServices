@@ -35,7 +35,8 @@
 	},
 	"dependencies": {
 		"@inlang/paraglide-js": "^2.0.0",
-		"plotly": "^1.0.6",
+		"graphology": "^0.26.0",
+		"sigma": "^3.0.1",
 		"svelte-lazy-image": "^0.5.1"
 	}
 }
