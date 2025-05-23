@@ -1,0 +1,59 @@
+type: object
+properties:
+  description:
+    type: string
+    default: ShallowView dashboard public API.
+  version:
+    type: string
+    pattern: ^(?:0|[1-9]\d*).(?:0|[1-9]\d*).(?:0|[1-9]\d*)-(?:a|b|s|rc).(?:0|[1-9]\d*)$
+    default: 1.0.0-b.2
+  authors:
+    type: array
+    items:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 3
+          maxLength: 32
+        url:
+          type: string
+          format: uri
+        note:
+          type: string
+          maxLength: 64
+      required:
+        - username
+    default:
+      - username: Xibitol
+        url: "https://gitlab.univ-lr.fr/xibitol"
+        note: A developer in too many domains.
+  license:
+    type: object
+    properties:
+      name:
+        type: string
+        default: LGPL-3.0-only
+      url:
+        type: string
+        format: uri
+        default: "https://www.gnu.org/licenses/lgpl-3.0.html"
+    required:
+      - name
+      - url
+  repository:
+    type: string
+    format: uri
+    default: "https://github.com/ShallowView/WebServices"
+  documentation:
+    type: string
+    format: uri
+    default: "https://doc.shallowview.org/"
+required:
+  - description
+  - version
+  - authors
+  - license
+  - repository
+  - documentation
+readOnly: true

@@ -1,0 +1,24 @@
+400BadRequest:
+  description: Bad request
+  content:
+    application/json:
+      schema:
+        $ref: "schemas/Error.yaml"
+      example:
+        type: "about:blank"
+        title: Bad request
+        status: 400
+        detail: Attribute '{attr}' of '{object}' should {rules} (Got '{value}').
+        instance: "https://doc.shallowview.org/"
+404NotFound:
+  description: Not found
+  content:
+    application/json:
+      schema:
+        $ref: "schemas/Error.yaml"
+      example:
+        type: "about:blank"
+        title: Not found
+        status: 404
+        detail: No such resource at '{url}'.
+        instance: "https://doc.shallowview.org/"
